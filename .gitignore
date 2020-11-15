@@ -1,0 +1,9 @@
+# Logs
+*.retry
+*.log
+
+# Dependencies
+vendor
+
+# Security
+.vault_pass

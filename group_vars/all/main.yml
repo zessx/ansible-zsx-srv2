@@ -1,0 +1,11 @@
+---
+# Ansible
+vault_ansible_sudo_pass: '{{ ansible_sudo_pass }}'
+
+# Composer
+composer_keep_updated: false
+composer_global_packages: []
+
+# PHP
+php_default_version_ubuntu: 7.4
+php_packages_extra: []

@@ -1,0 +1,21 @@
+---
+roles:
+  - name: composer
+    version: 1.9.0
+    src: geerlingguy.composer
+
+  - name: git
+    version: 3.0.0
+    src: geerlingguy.git
+
+  - name: nginx
+    version: 2.8.0
+    src: geerlingguy.nginx
+
+  - name: php
+    version: 4.5.1
+    src: geerlingguy.php
+
+  - name: docker
+    version: 2.9.0
+    src: geerlingguy.docker
