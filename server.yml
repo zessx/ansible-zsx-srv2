@@ -1,7 +1,16 @@
 ---
-- hosts: zsx-srv2
+
+- name: Test Connection and determine remote user
+  hosts: zsx-srv2
+  gather_facts: false
+  roles:
+    - { role: connection, tags: [connection, always] }
+
+- name: Provisioning
+  hosts: zsx-srv2
   become: yes
   roles:
+    - { role: users,       tags: [users] }
     - { role: git,         tags: [git] }
     - { role: php,         tags: [php] }
     - { role: composer,    tags: [composer] }
