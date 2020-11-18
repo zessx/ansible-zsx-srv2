@@ -10,9 +10,11 @@
   hosts: zsx-srv2
   become: yes
   roles:
+    - { role: common,      tags: [common] }
     - { role: users,       tags: [users] }
     - { role: git,         tags: [git] }
     - { role: php,         tags: [php] }
     - { role: composer,    tags: [composer] }
     - { role: nginx,       tags: [nginx] }
     - { role: docker,      tags: [docker] }
+    - { role: sites,       tags: [sites] }

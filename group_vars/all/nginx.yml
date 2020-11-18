@@ -1,0 +1,16 @@
+---
+# Vhosts
+nginx_vhosts:
+  #
+  # listenmu.com
+  #
+  - listen: "443 ssl http2"
+    server_name: listenmu.com
+    server_name_redirect: www.listenmu.com
+    root: /var/www/listenmu.com
+    template: files/vhosts/listenmu.com.conf.j2
+    filename: listenmu.com.conf
+  - listen: 80
+    server_name: "listenmu.com www.listenmu.com"
+    return: "301 https://listenmu.com$request_uri"
+    filename: "listenmu.com.80.conf"

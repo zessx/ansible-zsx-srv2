@@ -1,0 +1,31 @@
+{% extends 'vendor/roles/nginx/templates/vhost.j2' %}
+
+{% block server_end %}
+  location = /lost-in-rain {
+    rewrite ^ https://soundcloud.com/listen-mu/lost-in-rain redirect;
+  }
+  location = /nautilus {
+    rewrite ^ https://soundcloud.com/listen-mu/nautilus redirect;
+  }
+  location = /daisy {
+    rewrite ^ https://soundcloud.com/listen-mu/daisy-daisy-give-me-your-answer-do redirect;
+  }
+  location = /daisy-daisy-give-me-your-answer-do {
+    rewrite ^ https://soundcloud.com/listen-mu/daisy-daisy-give-me-your-answer-do redirect;
+  }
+  location = /fury-58 {
+    rewrite ^ https://soundcloud.com/listen-mu/fury-58 redirect;
+  }
+  location = /what-shall-we-do {
+    rewrite ^ https://soundcloud.com/listen-mu/what-shall-we-do redirect;
+  }
+  location = /space-corgi {
+    rewrite ^ https://soundcloud.com/listen-mu/the-interstellar-adventure-of-space-corgi redirect;
+  }
+  location = /the-interstellar-adventure-of-space-corgi {
+    rewrite ^ https://soundcloud.com/listen-mu/the-interstellar-adventure-of-space-corgi redirect;
+  }
+  location = /journey {
+    rewrite ^ https://soundcloud.com/listen-mu/journey redirect;
+  }
+{% endblock %}

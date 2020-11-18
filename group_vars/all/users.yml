@@ -1,23 +1,28 @@
 ---
-# Global roles
+# Unix users
 admin_user: admin
 web_user: web
+web_group: www-data
 
 # Ansible user
 ansible_user: "{{ admin_user }}"
 
 # Nginx
-nginx_user: "{{ web_user }}"
+nginx_user: "{{ web_user }} {{ web_group }}"
 
 # Unix users
 users:
   - name: "{{ admin_user }}"
     groups:
+      - "{{ web_group }}"
       - sudo
     keys:
       - "https://github.com/zessx.keys"
   - name: "{{ web_user }}"
     groups:
-      - www-data
+      - "{{ web_group }}"
     keys:
       - "https://github.com/zessx.keys"
+
+# Git
+git_user: zessx

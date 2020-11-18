@@ -31,3 +31,17 @@
   with_subelements:
     - "{{ users | default([]) }}"
     - keys
+
+- name: Setup server private SSH key
+  copy:
+    src: files/ssh/server.key
+    dest: "/home/{{ admin_user }}/.ssh/id_rsa"
+    owner: "{{ admin_user }}"
+    mode: 0600
+
+- name: Setup server public SSH key
+  copy:
+    src: files/ssh/server.key.pub
+    dest: "/home/{{ admin_user }}/.ssh/id_rsa.pub"
+    owner: "{{ admin_user }}"
+    mode: 0644

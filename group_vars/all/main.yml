@@ -4,6 +4,19 @@ vault_ansible_sudo_pass: "{{ ansible_sudo_pass }}"
 ansible_ssh_host: "{{ vault_ansible_ssh_host }}"
 ansible_ssh_private_key_file: ~/.ssh/id_rsa
 
+# Time
+ntp_timezone: Europe/Paris
+
+# APT
+apt_keys: []
+apt_packages:
+  build-essential: present
+  curl: present
+  nano: present
+  python: present
+  unzip: present
+apt_cache_valid_time: 3600
+
 # Composer
 composer_keep_updated: false
 composer_global_packages: []
@@ -11,3 +24,6 @@ composer_global_packages: []
 # PHP
 php_default_version_ubuntu: 7.4
 php_packages_extra: []
+
+# Nginx
+www_root: /var/www

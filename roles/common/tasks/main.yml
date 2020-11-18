@@ -1,0 +1,61 @@
+---
+- name: Ensure SSHPass is installed
+  become: false
+  homebrew:
+    name: esolitos/ipa/sshpass
+    state: present
+  delegate_to: localhost
+  tags: [sshpass]
+
+- name: Add APT keys
+  apt_key:
+    keyserver: "{{ item.value.keyserver }}"
+    id: "{{ item.value.id }}"
+  with_dict: "{{ apt_keys }}"
+
+- name: Update apt packages
+  apt:
+    update_cache: yes
+
+- name: Checking essentials
+  apt:
+    name: "{{ item.key }}"
+    state: "{{ item.value }}"
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  with_dict: "{{ apt_packages }}"
+
+- name: Validate timezone variable
+  stat:
+    path: /usr/share/zoneinfo/{{ ntp_timezone }}
+  register: timezone_path
+  changed_when: false
+
+- name: Explain timezone error
+  fail:
+    msg: "{{ ntp_timezone }} is not a valid timezone. For a list of valid timezones, check https://php.net/manual/en/timezones.php"
+  when: not timezone_path.stat.exists
+
+- name: Add myhostname to nsswitch.conf to ensure resolvable hostname
+  lineinfile:
+    backrefs: yes
+    backup: yes
+    dest: /etc/nsswitch.conf
+    line: \1 myhostname
+    regexp: ^(hosts\:((?!myhostname).)*)$
+    state: present
+
+- name: Retrieve SSH client IP
+  block:
+    - ipify_facts:
+      delegate_to: localhost
+      become: no
+      when: ssh_client_ip_lookup | default(true)
+  rescue:
+    - fail:
+        msg: "External IP resolution failed. Check that your DNS servers are working. Try to disable DNSCrypt if you are using it."
+
+- name: Generate required locales
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ locales | default([]) }}"
