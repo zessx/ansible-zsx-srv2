@@ -1,7 +1,7 @@
 ---
 - name: Initialize the deploy root and gather facts
   deploy_helper:
-    path: "{{ site_root }}"
+    path: "{{ deploy_site_root }}"
 
 - name: Add known hosts
   known_hosts:
@@ -13,9 +13,9 @@
 
 - name: Clone the project to the new release folder
   git:
-    repo: "{{ site_repository }}"
+    repo: "{{ deploy_site_repository }}"
     dest: "{{ deploy_helper.new_release_path }}"
-    version: "{{ site_branch }}"
+    version: "{{ deploy_site_branch }}"
 
 - name: Add an unfinished file, to allow cleanup on successful finalize
   file:
@@ -23,41 +23,41 @@
     state: touch
 
 - name: Search for a build tasks file
-  local_action: "stat path={{ site_build_tasks }}"
+  local_action: "stat path={{ deploy_site_build_tasks }}"
   register: build_tasks_file
   become: no
 
 - name: Include build tasks
-  include: "{{ site_build_tasks }}"
+  include: "{{ deploy_site_build_tasks }}"
   when: build_tasks_file.stat.exists
 
 - name: Create shared folders
   file:
     path: "{{ deploy_helper.shared_path }}/{{ item.src }}"
     state: directory
-  loop: "{{ site_shared | flatten(levels=1) }}"
+  loop: "{{ deploy_site_shared | flatten(levels=1) }}"
 
 - name: Add symlinks from the new release to the shared folders
   file:
     path: "{{ deploy_helper.new_release_path }}/{{ item.path }}"
     src: "{{ deploy_helper.shared_path }}/{{ item.src }}"
     state: link
-  loop: "{{ site_shared | flatten(levels=1) }}"
+  loop: "{{ deploy_site_shared | flatten(levels=1) }}"
 
 - name: Finalize the deploy, removing the unfinished file and switching the symlink
   deploy_helper:
-    path: "{{ site_root }}"
+    path: "{{ deploy_site_root }}"
     release: "{{ deploy_helper.new_release }}"
     state: finalize
-    keep_releases: "{{ site_keep_releases }}"
+    keep_releases: "{{ deploy_site_keep_releases }}"
 
 - name: Run 'state=query' to gather facts without changing anything
   deploy_helper:
-    path: "{{ site_root }}"
+    path: "{{ deploy_site_root }}"
     state: query
 
 - name: Initialize the deploy root
   deploy_helper:
-    path: "{{ site_root }}"
+    path: "{{ deploy_site_root }}"
     release: "{{ deploy_helper.new_release }}"
     state: present
