@@ -1,0 +1,11 @@
+---
+# Sites
+sites:
+  listenmu.com:
+    hosts:
+    - canonical: listenmu.com
+      redirects:
+        - www.listenmu.com
+    ssl: true
+    repository: git@github.com:zessx/listenmu.com.git
+    branch: main

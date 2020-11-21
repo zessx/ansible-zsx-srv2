@@ -1,5 +1,4 @@
 ---
-
 - name: Test Connection and determine remote user
   hosts: zsx-srv2
   gather_facts: false

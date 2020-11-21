@@ -2,12 +2,15 @@
 
 Configuration used on a personal server.
 
+## Prerequisites
+
+Make sure you're using an Ansible version at least equal to 2.9.
+
 ## Installation
 
-Install prerequisites:
+Install dependencies:
 ```sh
 ansible-galaxy install -r requirements.yml
-brew install esolitos/ipa/sshpass
 ```
 
 Create the Ansible Vault pass file:
@@ -15,7 +18,7 @@ Create the Ansible Vault pass file:
 echo 'xxxxxxxxxx' > .vault_pass
 ```
 
-## Usage
+## Provisioning
 
 For the first provisioning, you'll need to use the root user, and will be prompted its password:
 ```sh
@@ -30,4 +33,11 @@ ansible-playbook server.yml -vvv
 You can provision a single tag, this will be faster and easier:
 ```sh
 ansible-playbook server.yml --tags=users
+```
+
+# Deploy
+
+Use the `deploy.yml` playbook to deploy a site. Before to do so, you must load your SSH key on MacOS:
+```sh
+ssh-add -K && ansible-playbook deploy.yml -e site=<site>
 ```

@@ -1,0 +1,11 @@
+---
+default_git_branch: HEAD
+default_keep_releases: 3
+
+# Helpers
+site_root: "{{ sites[site].root | default(www_root + '/' + site) }}"
+site_shared: "{{ sites[site].shared | default([]) }}"
+site_keep_releases: "{{ sites[site].keep_releases | default(default_keep_releases) }}"
+site_repository: "{{ sites[site].repository }}"
+site_branch: "{{ sites[site].branch | default(default_git_branch) }}"
+site_build_tasks: "{{ sites[site].build_tasks | default('files/builds/' + site + '.yml') }}"

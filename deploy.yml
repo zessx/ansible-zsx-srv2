@@ -1,0 +1,38 @@
+---
+- name: Ensure variables are defined
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Ensure site is defined
+      fail:
+        msg: |
+          Site variable is missing. Use `-e` to define `site`:
+          ansible-playbook deploy.yml -e site=<site>
+      when: site is not defined
+
+- name: Test Connection
+  hosts: zsx-srv2
+  gather_facts: false
+  vars:
+    dynamic_user: false
+  roles:
+    - { role: connection, tags: [connection, always] }
+
+- name: Deploy site
+  hosts: zsx-srv2
+  remote_user: "{{ web_user }}"
+  pre_tasks:
+    - name: Ensure site is valid
+      delegate_to: localhost
+      fail:
+        msg: "Site `{{ site | default('') }}` is not valid. Available sites to deploy: {{ sites.keys() | join(', ') }}"
+      when: sites[site | default('')] is not defined
+    - name: Ensure repository is valid
+      delegate_to: localhost
+      fail:
+        msg: |
+          Invalid Git repository.
+          Ensure that your site's `repo` variable is defined in `group_vars/all/sites.yml` and uses the SSH format.
+      when: site_repository is not defined or site_repository is not match("^ssh://.+@.+|.+@.+:.+")
+  roles:
+    - { role: deploy, tags: [deploy] }

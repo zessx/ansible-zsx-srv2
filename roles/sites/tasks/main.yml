@@ -12,27 +12,20 @@
     path: "{{ www_root }}/html"
     state: absent
 
-- name: Ensure sites directories exist
+- name: Create site directories
   file:
-    path: "{{ item.root }}"
+    path: "{{ www_root }}/{{ item.key }}"
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
     mode: 0755
     state: directory
-  when: item.git is defined
-  with_items: "{{ nginx_vhosts }}"
+  loop: "{{ sites | dict2items }}"
 
-- name: Add known_hosts
-  known_hosts:
-    name: "{{ item.name }}"
-    key: "{{ item.key | default(omit) }}"
-    path: "{{ item.path | default(omit) }}"
-    state: "{{ item.state | default('present') }}"
-  with_items: "{{ known_hosts | default([]) }}"
-
-- name: Deploy sites
-  git:
-    repo: "{{ item.value.repository }}"
-    dest: "{{ nginx_vhosts | selectattr('server_name', 'equalto', item.key) | map(attribute='root') | list | first }}"
-    version: "{{ item.value.branch | default(git_default_branch) }}"
-  with_dict: "{{ sites }}"
+- name: Create logs directories
+  file:
+    path: "{{ www_root }}/{{ item.key }}/logs"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+  loop: "{{ sites | dict2items }}"

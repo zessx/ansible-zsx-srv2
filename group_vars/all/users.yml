@@ -4,9 +4,6 @@ admin_user: admin
 web_user: web
 web_group: www-data
 
-# Ansible user
-ansible_user: "{{ admin_user }}"
-
 # Nginx
 nginx_user: "{{ web_user }} {{ web_group }}"
 
