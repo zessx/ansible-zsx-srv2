@@ -3,9 +3,10 @@
 sites:
   listenmu.com:
     hosts:
-    - canonical: listenmu.com
+      canonical: listenmu.com
       redirects:
         - www.listenmu.com
-    ssl: true
+    ssl: false
     repository: git@github.com:zessx/listenmu.com.git
     branch: main
+    vhost: files/vhosts/listenmu.com.conf.j2

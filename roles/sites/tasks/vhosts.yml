@@ -1,0 +1,34 @@
+---
+- name: Add managed vhost config files.
+  template:
+    src: "{{ item.value.vhost | default('vhost.conf.j2') }}"
+    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+    force: true
+    owner: root
+    group: root
+    mode: 0644
+  when: item.value.enabled | default(true)
+  loop: "{{ sites | dict2items }}"
+  notify: reload nginx
+  tags: [vhosts]
+
+- name: Activate enabled sites vhost.
+  file:
+    src: "/etc/nginx/sites-available/{{ item.key }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ item.key }}.conf"
+    owner: root
+    group: root
+    state: link
+  when: item.value.enabled | default(true)
+  loop: "{{ sites | dict2items }}"
+  notify: reload nginx
+  tags: [vhosts]
+
+- name: Deactivate disabled sites vhost.
+  file:
+    path: "/etc/nginx/sites-enabled/{{ item.key }}.conf"
+    state: absent
+  when: not item.value.enabled | default(true)
+  loop: "{{ sites | dict2items }}"
+  notify: reload nginx
+  tags: [vhosts]

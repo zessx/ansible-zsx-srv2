@@ -1,0 +1,35 @@
+---
+- name: Create web root
+  file:
+    path: "{{ www_root }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+  tags: [directories]
+
+- name: Remove default html directory
+  file:
+    path: "{{ www_root }}/html"
+    state: absent
+  tags: [directories]
+
+- name: Create site directories
+  file:
+    path: "{{ www_root }}/{{ item.key }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+  loop: "{{ sites | dict2items }}"
+  tags: [directories]
+
+- name: Create logs directories
+  file:
+    path: "{{ www_root }}/{{ item.key }}/logs"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+  loop: "{{ sites | dict2items }}"
+  tags: [directories]

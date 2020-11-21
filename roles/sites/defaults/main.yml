@@ -1,1 +1,4 @@
 ---
+# Helpers
+site_root: "{{ item.value.root | default(www_root + '/' + item.key) }}"
+site_ssl_enabled: "{{ item.value.ssl | default(false) }}"

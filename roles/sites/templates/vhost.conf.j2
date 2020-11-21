@@ -1,0 +1,43 @@
+{% block server_redirect %}
+{% if site_ssl_enabled %}
+server {
+    listen 80;
+    listen [::]:80
+
+    server_name {{ ([item.value.hosts.canonical] + (item.value.hosts.redirects | default([]))) | join(' ') }};
+
+    return 301 https://{{ item.value.hosts.canonical }}$request_uri;
+}
+
+{% endif %}
+{% if item.value.hosts.redirects is defined and item.value.hosts.redirects %}
+server {
+    listen {{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
+    listen [::]:{{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
+
+    server_name {{ item.value.hosts.redirects | join(' ') }};
+
+    return 301 $scheme://{{ item.value.hosts.canonical }}$request_uri;
+}
+
+{% endif %}
+{% endblock -%}
+
+server {
+    {% block server_begin %}{% endblock %}
+
+    {% block server_basic -%}
+    listen {{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
+    listen [::]:{{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
+
+    server_name {{ item.value.hosts.canonical }};
+
+    root {{ site_root }}/current;
+    index {{ item.value.index | default('index.html') }};
+
+    access_log {{ site_root }}/logs/access.log;
+    error_log {{ site_root }}/logs/error.log;
+    {% endblock %}
+
+    {% block server_end %}{% endblock %}
+}
