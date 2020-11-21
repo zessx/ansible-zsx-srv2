@@ -1,6 +1,7 @@
 {% extends 'roles/sites/templates/vhost.conf.j2' %}
 
-{% block server_end -%}
+{% block server_custom -%}
+    # Tracks
     location = /lost-in-rain {
         rewrite ^ https://soundcloud.com/listen-mu/lost-in-rain redirect;
     }

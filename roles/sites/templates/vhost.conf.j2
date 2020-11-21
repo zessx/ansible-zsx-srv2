@@ -2,11 +2,14 @@
 {% if site_ssl_enabled %}
 server {
     listen 80;
-    listen [::]:80
+    listen [::]:80;
+    server_name {{ site_hosts | join(' ') }};
 
-    server_name {{ ([item.value.hosts.canonical] + (item.value.hosts.redirects | default([]))) | join(' ') }};
+    include acme-challenge-location.conf;
 
-    return 301 https://{{ item.value.hosts.canonical }}$request_uri;
+    location / {
+        return 301 https://{{ item.value.hosts.canonical }}$request_uri;
+    }
 }
 
 {% endif %}
@@ -14,30 +17,41 @@ server {
 server {
     listen {{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
     listen [::]:{{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
-
     server_name {{ item.value.hosts.redirects | join(' ') }};
 
-    return 301 $scheme://{{ item.value.hosts.canonical }}$request_uri;
+    include acme-challenge-location.conf;
+
+    location / {
+        return 301 $scheme://{{ item.value.hosts.canonical }}$request_uri;
+    }
 }
 
 {% endif %}
 {% endblock -%}
 
 server {
-    {% block server_begin %}{% endblock %}
-
     {% block server_basic -%}
     listen {{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
     listen [::]:{{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
-
     server_name {{ item.value.hosts.canonical }};
+    {% endblock %}
 
+    {% block server_root -%}
+    # Application root
     root {{ site_root }}/current;
     index {{ item.value.index | default('index.html') }};
+    {% endblock %}
 
+    {% block server_logs -%}
+    # Logs
     access_log {{ site_root }}/logs/access.log;
     error_log {{ site_root }}/logs/error.log;
     {% endblock %}
 
-    {% block server_end %}{% endblock %}
+    {% block server_ssl -%}
+    # SSL
+    include acme-challenge-location.conf;
+    {% endblock %}
+
+    {% block server_custom %}{% endblock %}
 }
