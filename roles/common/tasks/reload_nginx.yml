@@ -1,0 +1,9 @@
+---
+- name: Reload nginx
+  command: nginx -t
+  notify: "{{ (role_path | basename == 'common') | ternary('Perform nginx reload', omit) }}"
+
+- name: Perform nginx reload
+  service:
+    name: nginx
+    state: reloaded

@@ -27,7 +27,7 @@ php_packages_extra: []
 
 # Nginx
 www_root: /var/www
-nginx_vhosts: []
+nginx_path: /etc/nginx
 
 # Known hosts
 known_hosts:
