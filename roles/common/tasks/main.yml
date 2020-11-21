@@ -11,7 +11,7 @@
   apt_key:
     keyserver: "{{ item.value.keyserver }}"
     id: "{{ item.value.id }}"
-  with_dict: "{{ apt_keys }}"
+  loop: "{{ apt_keys | dict2items }}"
 
 - name: Update apt packages
   apt:
@@ -22,7 +22,7 @@
     name: "{{ item.key }}"
     state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_dict: "{{ apt_packages }}"
+  loop: "{{ apt_packages | dict2items }}"
 
 - name: Validate timezone variable
   stat:
@@ -58,4 +58,4 @@
   locale_gen:
     name: "{{ item }}"
     state: present
-  with_items: "{{ locales | default([]) }}"
+  loop: "{{ locales | default([]) | flatten(levels=1) }}"

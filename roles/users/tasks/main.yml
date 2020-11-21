@@ -3,7 +3,7 @@
   group:
     name: "{{ item }}"
     state: present
-  with_items: "{{ users | sum(attribute='groups', start=[]) | list | unique }}"
+  loop: "{{ users | sum(attribute='groups', start=[]) | list | unique | flatten(levels=1) }}"
 
 - name: Ensure sudo group has sudo privileges
   lineinfile:
@@ -22,15 +22,13 @@
     state: present
     shell: /bin/bash
     update_password: "{{ item.update_password | default('always') }}"
-  with_items: "{{ users }}"
+  loop: "{{ users | flatten(levels=1) }}"
 
 - name: Add SSH keys
   authorized_key:
     user: "{{ item.0.name }}"
     key: "{{ item.1 }}"
-  with_subelements:
-    - "{{ users | default([]) }}"
-    - keys
+  loop: "{{ users | default([]) | subelements('keys') }}"
 
 - name: Setup server private SSH key
   copy:
