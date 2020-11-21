@@ -15,6 +15,7 @@ apt_packages:
   nano: present
   python: present
   unzip: present
+  cron: present
 apt_cache_valid_time: 3600
 
 # Composer
@@ -28,6 +29,7 @@ php_packages_extra: []
 # Nginx
 www_root: /var/www
 nginx_path: /etc/nginx
+nginx_ssl_path: "{{ nginx_path }}/ssl"
 
 # Known hosts
 known_hosts:

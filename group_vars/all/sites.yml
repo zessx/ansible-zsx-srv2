@@ -6,7 +6,7 @@ sites:
       canonical: listenmu.com
       redirects:
         - www.listenmu.com
-    ssl: false
+    ssl: true
     repository: git@github.com:zessx/listenmu.com.git
     branch: main
     vhost: files/vhosts/listenmu.com.conf.j2
