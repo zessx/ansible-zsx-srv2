@@ -34,6 +34,7 @@
 - name: Create shared folders
   file:
     path: "{{ deploy_helper.shared_path }}/{{ item.src }}"
+    mode: "{{ item.mode | default(775) }}"
     state: directory
   loop: "{{ deploy_site_shared | flatten(levels=1) }}"
 
