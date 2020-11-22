@@ -1,0 +1,29 @@
+{% extends 'roles/sites/templates/vhost.conf.j2' %}
+
+{% block server_root -%}
+    {{ super() }}
+    error_page 404 https://doc.smarchal.com;
+{% endblock %}
+
+{% block server_custom -%}
+    # PHP
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Public locations
+    location = / {
+        rewrite ^ /?dir=public break;
+    }
+
+    # Private locations
+    {% for item in vault_docsmarchalcom_private_locations -%}
+    location {{ item.location }} {
+        rewrite ^ {{ item.redirect }} {{ item.type | default('break') }};
+    }
+    {% endfor -%}
+{% endblock %}

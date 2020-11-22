@@ -1,0 +1,10 @@
+---
+- name: Clear application cache
+  file:
+    state: "{{ item.1 }}"
+    path: "{{ deploy_helper.shared_path }}/{{ item.0.src }}"
+    mode: "{{ item.0.mode | default(775) }}"
+  loop: "{{ deploy_site_shared | selectattr('src', 'equalto', 'cache') | product(['absent', 'directory']) | list }}"
+  tags: [build]
+
+- import_tasks: roles/common/tasks/reload_php_fpm.yml

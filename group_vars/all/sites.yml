@@ -1,6 +1,7 @@
 ---
 # Sites
 sites:
+
   listenmu.com:
     hosts:
       canonical: listenmu.com
@@ -10,3 +11,19 @@ sites:
     repository: git@github.com:zessx/listenmu.com.git
     branch: main
     vhost: files/vhosts/listenmu.com.conf.j2
+
+  doc.smarchal.com:
+    hosts:
+      canonical: doc.smarchal.com
+    ssl: true
+    repository: git@github.com:zessx/doc.smarchal.com.git
+    branch: main
+    vhost: files/vhosts/doc.smarchal.com.conf.j2
+    index: index.php
+    shared:
+      - path: app/cache
+        src: cache
+      - path: private
+        src: private
+      - path: public
+        src: public
