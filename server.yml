@@ -16,5 +16,5 @@
     - { role: composer,    tags: [composer] }
     - { role: nginx,       tags: [nginx] }
     - { role: docker,      tags: [docker] }
-    - { role: sites,       tags: [sites] }
     - { role: letsencrypt, tags: [letsencrypt] }
+    - { role: sites,       tags: [sites] }

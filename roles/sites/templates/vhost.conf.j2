@@ -19,7 +19,16 @@ server {
     listen [::]:{{ site_ssl_enabled | ternary('443 ssl http2', '80') }};
     server_name {{ item.value.hosts.redirects | join(' ') }};
 
+    {% block server_redirect_ssl -%}
+    # SSL
+    {% if site_ssl_enabled -%}
+    ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; ";
+    ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}-bundled.cert;
+    ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
+    {% endif -%}
     include acme-challenge-location.conf;
+    {% endblock %}
 
     location / {
         return 301 $scheme://{{ item.value.hosts.canonical }}$request_uri;
@@ -50,6 +59,12 @@ server {
 
     {% block server_ssl -%}
     # SSL
+    {% if site_ssl_enabled -%}
+    ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; ";
+    ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}-bundled.cert;
+    ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
+    {% endif -%}
     include acme-challenge-location.conf;
     {% endblock %}
 
