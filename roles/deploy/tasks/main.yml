@@ -22,14 +22,16 @@
     path: "{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}"
     state: touch
 
-- name: Search for a build tasks file
+- name: Search for a deploy_build tasks file
   local_action: "stat path={{ deploy_site_build_tasks }}"
-  register: build_tasks_file
+  register: deploy_build_tasks_file
   become: no
+  tags: [build]
 
-- name: Include build tasks
+- name: Include deploy_build tasks
   include: "{{ deploy_site_build_tasks }}"
-  when: build_tasks_file.stat.exists
+  when: deploy_build_tasks_file.stat.exists
+  tags: [build]
 
 - name: Create shared folders
   file:
@@ -52,13 +54,13 @@
     state: finalize
     keep_releases: "{{ deploy_site_keep_releases }}"
 
-- name: Run 'state=query' to gather facts without changing anything
-  deploy_helper:
-    path: "{{ deploy_site_root }}"
-    state: query
+- name: Search for a deploy_finalize tasks file
+  local_action: "stat path={{ deploy_site_finalize_tasks }}"
+  register: deploy_finalize_tasks_file
+  become: no
+  tags: [finalize]
 
-- name: Initialize the deploy root
-  deploy_helper:
-    path: "{{ deploy_site_root }}"
-    release: "{{ deploy_helper.new_release }}"
-    state: present
+- name: Include deploy_finalize tasks
+  include: "{{ deploy_site_finalize_tasks }}"
+  when: deploy_finalize_tasks_file.stat.exists
+  tags: [finalize]
