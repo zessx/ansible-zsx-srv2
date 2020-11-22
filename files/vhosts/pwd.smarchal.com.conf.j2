@@ -1,0 +1,19 @@
+{% extends 'roles/sites/templates/vhost.conf.j2' %}
+
+{% block server_custom -%}
+    # PHP
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Rewrite engine
+    location / {
+        if (!-e $request_filename) {
+            rewrite "^/(.*)/?$" /index.php?preset=$1 last;
+        }
+    }
+{% endblock %}

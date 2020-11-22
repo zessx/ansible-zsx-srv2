@@ -36,3 +36,15 @@ sites:
     branch: main
     vhost: files/vhosts/archive.smarchal.com.conf.j2
     index: "index.php index.html"
+
+  pwd.smarchal.com:
+    hosts:
+      canonical: pwd.smarchal.com
+    ssl: true
+    repository: git@github.com:zessx/nikagi.git
+    branch: master
+    vhost: files/vhosts/pwd.smarchal.com.conf.j2
+    index: index.php
+    shared:
+      - path: config
+        src: config
