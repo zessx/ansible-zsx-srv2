@@ -1,0 +1,5 @@
+---
+- name: Reload PHP-FPM
+  shell: "sudo service php{{ php_version }}-fpm reload"
+  args:
+    warn: false

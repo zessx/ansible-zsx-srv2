@@ -23,3 +23,7 @@ users:
 
 # Git
 git_user: zessx
+
+# Sudo services for web user
+web_sudo_services:
+  - "/usr/sbin/service php{{ php_version }}-fpm *"

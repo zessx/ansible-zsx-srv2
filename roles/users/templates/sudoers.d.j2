@@ -1,0 +1,3 @@
+{% for service in web_sudo_services %}
+{{ web_user }} ALL=(root) NOPASSWD: {{ service }}
+{% endfor %}
