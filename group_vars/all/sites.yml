@@ -27,3 +27,12 @@ sites:
         src: private
       - path: public
         src: public
+
+  archive.smarchal.com:
+    hosts:
+      canonical: archive.smarchal.com
+    ssl: true
+    repository: git@github.com:zessx/archive.smarchal.com.git
+    branch: main
+    vhost: files/vhosts/archive.smarchal.com.conf.j2
+    index: "index.php index.html"
