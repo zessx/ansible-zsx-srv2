@@ -32,7 +32,7 @@
       fail:
         msg: |
           Invalid Git repository.
-          Ensure that your site's `repo` variable is defined in `group_vars/all/sites.yml` and uses the SSH format.
-      when: site_repository is not defined or site_repository is not match("^ssh://.+@.+|.+@.+:.+")
+          Ensure that your site's `repository` variable is defined in `group_vars/all/sites.yml` and uses the SSH format.
+      when: deploy_site_repository is not defined or deploy_site_repository is not match("^ssh://.+@.+|.+@.+:.+")
   roles:
     - { role: deploy, tags: [deploy] }
