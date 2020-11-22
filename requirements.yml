@@ -12,6 +12,10 @@ roles:
     version: 2.8.0
     src: geerlingguy.nginx
 
+  - name: php-versions
+    version: 4.0.4
+    src: geerlingguy.php-versions
+
   - name: php
     version: 4.5.1
     src: geerlingguy.php

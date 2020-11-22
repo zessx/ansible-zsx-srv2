@@ -23,7 +23,9 @@ composer_keep_updated: false
 composer_global_packages: []
 
 # PHP
-php_default_version_ubuntu: 7.4
+php_version: 7.4
+php_versions_install_recommends: false
+php_webserver_daemon: 'nginx'
 php_packages_extra: []
 
 # Nginx
