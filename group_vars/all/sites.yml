@@ -59,3 +59,10 @@ sites:
     ssl: true
     web_root: web
     index: index.php
+
+  work.smarchal.com:
+    hosts:
+      canonical: work.smarchal.com
+    ssl: true
+    web_root: web
+    index: "index.php index.html"

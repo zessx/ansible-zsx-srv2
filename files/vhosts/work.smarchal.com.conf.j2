@@ -1,0 +1,26 @@
+{% extends 'roles/sites/templates/vhost.conf.j2' %}
+
+{% block server_custom -%}
+    # PHP
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # TWBSColor
+    location /twbscolor {
+        if (!-e $request_filename) {
+            rewrite "^/twbscolor/(\d\.[^/]+)/(scss|sass|less|css)/([\da-f]{25})$" /twbscolor/index.php?version=$1&tab=$2&params=$3 last;
+            rewrite "^/twbscolor/(\d\.[^/]+)/(scss|sass|less|css)$" /twbscolor/index.php?version=$1&tab=$2 last;
+            rewrite "^/twbscolor/(\d\.[^/]+)/([\da-f]{25})$" /twbscolor/index.php?version=$1&params=$2 last;
+            rewrite "^/twbscolor/(\d\.[^/]+)$" /twbscolor/index.php?version=$1 last;
+            rewrite "^/twbscolor/(scss|sass|less|css)/([\da-f]{25})$" /twbscolor/index.php?tab=$1&params=$2 last;
+            rewrite "^/twbscolor/([\da-f]{25})$" /twbscolor/index.php?params=$1 last;
+            rewrite "^/twbscolor/(scss|sass|less|css)$" /twbscolor/index.php?tab=$1 last;
+            rewrite "^/twbscolor/(.*)$" /twbscolor/index.php last;
+        }
+    }
+{% endblock %}
