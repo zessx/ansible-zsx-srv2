@@ -56,4 +56,4 @@ sites:
     repository: git@github.com:zessx/blog.git
     branch: master
     vhost: files/vhosts/blog.smarchal.com.conf.j2
-    web_root: /_site
+    web_root: current/_site
