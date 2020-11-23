@@ -23,7 +23,10 @@
     state: touch
 
 - name: Search for a deploy_build tasks file
-  local_action: "stat path={{ deploy_site_build_tasks }}"
+  stat:
+    path: "{{ deploy_site_build_tasks }}"
+  delegate_to: localhost
+  become: false
   register: deploy_build_tasks_file
   become: no
   tags: [build]
@@ -55,7 +58,10 @@
     keep_releases: "{{ deploy_site_keep_releases }}"
 
 - name: Search for a deploy_finalize tasks file
-  local_action: "stat path={{ deploy_site_finalize_tasks }}"
+  stat:
+    path: "{{ deploy_site_finalize_tasks }}"
+  delegate_to: localhost
+  become: false
   register: deploy_finalize_tasks_file
   become: no
   tags: [finalize]
