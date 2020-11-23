@@ -20,6 +20,10 @@ roles:
     version: 4.5.1
     src: geerlingguy.php
 
+  - name: rvm
+    version: v2.1.2
+    src: rvm.ruby
+
   - name: docker
     version: 2.9.0
     src: geerlingguy.docker

@@ -16,6 +16,7 @@
     - { role: php,          tags: [php] }
     - { role: composer,     tags: [composer] }
     - { role: nginx,        tags: [nginx] }
+    - { role: rvm,          tags: [rvm, ruby] }
     - { role: docker,       tags: [docker] }
     - { role: letsencrypt,  tags: [letsencrypt] }
     - { role: sites,        tags: [sites] }
