@@ -11,6 +11,16 @@ sites:
     repository: git@github.com:zessx/listenmu.com.git
     branch: main
 
+  smarchal.com:
+    hosts:
+      canonical: smarchal.com
+      redirects:
+        - www.smarchal.com
+    ssl: true
+    repository: git@github.com:zessx/site.git
+    branch: master
+    web_root: current/web
+
   doc.smarchal.com:
     hosts:
       canonical: doc.smarchal.com
