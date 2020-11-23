@@ -47,7 +47,7 @@ server {
 
     {% block server_root -%}
     # Application root
-    root {{ site_root }}/current;
+    root {{ site_root }}/current{{ item.value.web_root | default('') }};
     index {{ item.value.index | default('index.html') }};
     {% endblock %}
 
