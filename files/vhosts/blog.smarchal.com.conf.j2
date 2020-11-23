@@ -1,0 +1,13 @@
+{% extends 'roles/sites/templates/vhost.conf.j2' %}
+
+{% block server_custom -%}
+    # Rewrite engine
+    location / {
+      try_files $uri $uri/ $uri.html @htmltext /404.html =404;
+    }
+
+    # Rename "server" tag into "adminsys"
+    location /tag/server {
+      rewrite ^/tag/server/?$ https://blog.smarchal.com/tag/sysadmin/ permanent;
+    }
+{% endblock %}

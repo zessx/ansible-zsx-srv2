@@ -48,3 +48,12 @@ sites:
     shared:
       - path: config
         src: config
+
+  blog.smarchal.com:
+    hosts:
+      canonical: blog.smarchal.com
+    ssl: true
+    repository: git@github.com:zessx/blog.git
+    branch: master
+    vhost: files/vhosts/blog.smarchal.com.conf.j2
+    web_root: /_site
