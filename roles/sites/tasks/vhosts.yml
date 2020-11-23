@@ -1,7 +1,23 @@
 ---
+- name: Search for custom vhost config files
+  stat:
+    path: "{{ item.value.vhost | default('files/vhosts/' + item.key + '.conf.j2') }}"
+  register: sites_custom_vhost
+  delegate_to: localhost
+  become: false
+  when: item.value.enabled | default(true)
+  loop: "{{ sites | dict2items }}"
+  tags: [vhosts]
+
+- name: Choose vhost config file to use
+  set_fact:
+    sites_vhosts: "{{ sites_vhosts | default({}) | combine({ item.item.key: item.stat.exists | ternary(item.item.value.vhost | default('files/vhosts/' + item.item.key + '.conf.j2'), 'vhost.conf.j2') }) }}"
+  loop: "{{ sites_custom_vhost.results }}"
+  tags: [vhosts]
+
 - name: Add managed vhost config files.
   template:
-    src: "{{ item.value.vhost | default('vhost.conf.j2') }}"
+    src: "{{ sites_vhosts[item.key] }}"
     dest: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
     force: true
     owner: root

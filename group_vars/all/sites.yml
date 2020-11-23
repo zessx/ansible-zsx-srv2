@@ -10,7 +10,6 @@ sites:
     ssl: true
     repository: git@github.com:zessx/listenmu.com.git
     branch: main
-    vhost: files/vhosts/listenmu.com.conf.j2
 
   doc.smarchal.com:
     hosts:
@@ -18,7 +17,6 @@ sites:
     ssl: true
     repository: git@github.com:zessx/doc.smarchal.com.git
     branch: main
-    vhost: files/vhosts/doc.smarchal.com.conf.j2
     index: index.php
     shared:
       - path: app/cache
@@ -34,7 +32,6 @@ sites:
     ssl: true
     repository: git@github.com:zessx/archive.smarchal.com.git
     branch: main
-    vhost: files/vhosts/archive.smarchal.com.conf.j2
     index: "index.php index.html"
 
   pwd.smarchal.com:
@@ -43,7 +40,6 @@ sites:
     ssl: true
     repository: git@github.com:zessx/nikagi.git
     branch: master
-    vhost: files/vhosts/pwd.smarchal.com.conf.j2
     index: index.php
     shared:
       - path: config
@@ -55,5 +51,4 @@ sites:
     ssl: true
     repository: git@github.com:zessx/blog.git
     branch: master
-    vhost: files/vhosts/blog.smarchal.com.conf.j2
     web_root: current/_site
