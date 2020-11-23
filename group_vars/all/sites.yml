@@ -52,3 +52,10 @@ sites:
     repository: git@github.com:zessx/blog.git
     branch: master
     web_root: current/_site
+
+  mail.smarchal.com:
+    hosts:
+      canonical: mail.smarchal.com
+    ssl: true
+    web_root: web
+    index: index.php
