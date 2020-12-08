@@ -1,0 +1,4 @@
+---
+goaccess_path_reports: '{{ www_root }}/reports'
+goaccess_path_conf: '/etc/goaccess.conf'
+goaccess_path_service: '/etc/systemd/system/goaccess.service'

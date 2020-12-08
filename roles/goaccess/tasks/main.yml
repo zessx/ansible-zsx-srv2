@@ -1,0 +1,65 @@
+---
+- name: Register lsb release
+  command: lsb_release -cs
+  register: lsb_release
+
+- name: Install goaccess dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+    install_recommends: yes
+    update_cache: yes
+  loop:
+    - libgeoip-dev
+    - libncursesw5-dev
+    - libtokyocabinet-dev
+    - libssl-dev
+    - apt-transport-https
+
+- name: Add an Apt signing key, uses whichever key is at the URL
+  apt_key:
+    url: https://deb.goaccess.io/gnugpg.key
+    state: present
+
+- name: Add APT repository
+  apt_repository:
+    repo: "deb http://deb.goaccess.io/ {{ lsb_release.stdout }} main"
+    state: present
+    filename: 'goaccess'
+
+- name: Creates goaccess directory
+  file:
+    path: "{{ goaccess_path_reports }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+
+- name: Install goaccess package
+  apt:
+    name: goaccess
+    state: latest
+    update_cache: yes
+
+- name: Setup goaccess configuration
+  template:
+    src: goaccess.conf.j2
+    dest: "{{ goaccess_path_conf }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Setup goaccess service
+  template:
+    src: goaccess.service.j2
+    dest: "{{ goaccess_path_service }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start goaccess service
+  systemd:
+    name: goaccess
+    daemon_reload: yes
+    enabled: yes
+    state: started

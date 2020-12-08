@@ -18,5 +18,6 @@
     - { role: nginx,        tags: [nginx] }
     - { role: rvm,          tags: [rvm, ruby] }
     - { role: docker,       tags: [docker] }
+    - { role: goaccess,     tags: [goaccess] }
     - { role: letsencrypt,  tags: [letsencrypt] }
     - { role: sites,        tags: [sites] }
