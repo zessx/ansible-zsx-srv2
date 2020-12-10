@@ -59,3 +59,4 @@
     name: "{{ item }}"
     state: present
   loop: "{{ locales | default([]) | flatten(levels=1) }}"
+  tags: [locales]
