@@ -12,6 +12,9 @@ locales:
  - en_US.UTF-8
  - fr_FR.UTF-8
 
+# Python
+ansible_python_interpreter: /usr/bin/python3
+
 # APT
 apt_keys: {}
 apt_packages:
@@ -21,6 +24,9 @@ apt_packages:
   python: present
   unzip: present
   cron: present
+  python3-venv: present
+  python3-pip: present
+  gettext: present
 apt_cache_valid_time: 3600
 
 # Composer
@@ -47,6 +53,14 @@ rvm1_install_flags: '--auto-dotfiles'
 rvm1_user: root
 rvm1_rvm_version: stable
 rvm1_rvm_check_for_updates: False
+
+# PostgreSQL
+postgresql_locales: "{{ locales }}"
+postgresql_hba_entries:
+  - {type: local, database: all, user: postgres, auth_method: peer}
+  - {type: local, database: all, user: all, auth_method: md5}
+  - {type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5}
+  - {type: host, database: all, user: all, address: '::1/128', auth_method: md5}
 
 # Known hosts
 known_hosts:

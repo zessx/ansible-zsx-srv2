@@ -23,3 +23,7 @@ roles:
   - name: rvm
     version: v2.1.2
     src: rvm.ruby
+
+  - name: postgresql
+    version: 3.0.0
+    src: geerlingguy.postgresql
