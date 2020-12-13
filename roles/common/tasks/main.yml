@@ -7,6 +7,12 @@
   delegate_to: localhost
   tags: [sshpass]
 
+- name: Add APT repositories
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: yes
+  loop: "{{ apt_repositories | default([]) }}"
+
 - name: Add APT keys
   apt_key:
     keyserver: "{{ item.value.keyserver }}"

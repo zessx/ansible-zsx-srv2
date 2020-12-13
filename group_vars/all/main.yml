@@ -17,14 +17,18 @@ ansible_python_interpreter: /usr/bin/python3
 
 # APT
 apt_keys: {}
+apt_repositories:
+  - ppa:deadsnakes/ppa
 apt_packages:
+  software-properties-common: present
   build-essential: present
   curl: present
   nano: present
   python: present
   unzip: present
   cron: present
-  python3-venv: present
+  python3.7: present
+  python3.7-venv: present
   python3-pip: present
   gettext: present
   libssl1.0-dev: present
