@@ -27,6 +27,9 @@ apt_packages:
   python3-venv: present
   python3-pip: present
   gettext: present
+  libssl1.0-dev: present
+  node-gyp: present
+  nodejs-dev: present
 apt_cache_valid_time: 3600
 
 # Composer

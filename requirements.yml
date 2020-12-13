@@ -27,3 +27,7 @@ roles:
   - name: postgresql
     version: 3.0.0
     src: geerlingguy.postgresql
+
+  - name: npm
+    version: 2.4.1
+    src: robertdebock.npm
