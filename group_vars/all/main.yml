@@ -24,6 +24,7 @@ apt_packages:
   build-essential: present
   curl: present
   nano: present
+  htop: present
   python: present
   unzip: present
   cron: present
