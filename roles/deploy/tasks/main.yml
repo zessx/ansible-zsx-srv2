@@ -26,7 +26,6 @@
   stat:
     path: "{{ deploy_site_build_tasks }}"
   delegate_to: localhost
-  become: false
   register: deploy_build_tasks_file
   become: no
   tags: [build]
@@ -61,7 +60,6 @@
   stat:
     path: "{{ deploy_site_finalize_tasks }}"
   delegate_to: localhost
-  become: false
   register: deploy_finalize_tasks_file
   become: no
   tags: [finalize]
