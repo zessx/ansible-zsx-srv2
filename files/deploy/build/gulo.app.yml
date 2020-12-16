@@ -1,0 +1,70 @@
+---
+# Global
+- name: Create .env file
+  template:
+    src: roles/deploy/templates/.env.j2
+    dest: "{{ deploy_helper.new_release_path }}/.env"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0400
+
+# Frontend
+- name: Install npm dependencies
+  command: "npm ci"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}/frontend"
+
+- name: Compile frontend assets
+  command: "npm run build"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}/frontend"
+
+- name: Delete node_modules directory
+  file:
+    path: "{{ deploy_helper.new_release_path }}/frontend/node_modules"
+    state: absent
+
+# Backend
+- name: Create virtual environment
+  command: "python3.7 -m venv venv"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}/backend"
+
+- name: Create an executor for this virtual environment
+  template:
+    src: "files/templates/venv_exec.j2"
+    dest: "{{ deploy_helper.new_release_path }}/backend/venv/exec"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0550
+  vars:
+    venv: "{{ deploy_helper.new_release_path }}/backend/venv"
+
+- name: Install python requirements
+  command: "venv/exec pip3 install -r requirements.txt"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}/backend"
+
+- name: Get running processes
+  shell: "ps -ef | grep -v grep | grep -w 'backend/venv/bin/gunicorn' | awk '{print $2}'"
+  register: running_processes
+
+- name: Kill running processes
+  shell: "kill {{ item }}"
+  loop: "{{ running_processes.stdout_lines }}"
+
+- wait_for:
+    path: "/proc/{{ item }}/status"
+    state: absent
+  loop: "{{ running_processes.stdout_lines }}"
+  ignore_errors: yes
+  register: killed_processes
+
+- name: Force kill stuck processes
+  shell: "kill -9 {{ item }}"
+  loop: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
+
+- name: Start backend server
+  shell: "ENV_PATH={{ deploy_helper.new_release_path }}/ venv/exec nohup ./scripts/entrypoint.sh ./scripts/gunicorn.sh </dev/null >/dev/null 2>&1 &"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}/backend"

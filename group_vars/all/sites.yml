@@ -76,3 +76,27 @@ sites:
     ssl: true
     web_root: web
     index: "index.php index.html"
+
+  gulo.app:
+    hosts:
+      canonical: gulo.app
+      redirects:
+        - www.gulo.app
+    ssl: true
+    web_root: current/frontend/dist
+    repository: git@github.com:zessx/gulo.git
+    branch: main
+    database:
+      name: gulo
+      user:
+        name: gulo
+        password: "{{ vault_guloapp_db_password }}"
+    env:
+      debug: 'True'
+      secret_key: "{{ vault_guloapp_django_secret_key }}"
+      domain: 'https://gulo.app'
+      allowed_hosts: '*'
+      postgres_db: gulo
+      postgres_password: "{{ vault_guloapp_db_password }}"
+      postgres_user: gulo
+      postgres_host: 127.0.0.1
