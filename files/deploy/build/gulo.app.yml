@@ -51,17 +51,19 @@
 
 - name: Kill running processes
   shell: "kill {{ item }}"
+  ignore_errors: yes
   loop: "{{ running_processes.stdout_lines }}"
 
 - wait_for:
     path: "/proc/{{ item }}/status"
     state: absent
-  loop: "{{ running_processes.stdout_lines }}"
   ignore_errors: yes
   register: killed_processes
+  loop: "{{ running_processes.stdout_lines }}"
 
 - name: Force kill stuck processes
   shell: "kill -9 {{ item }}"
+  ignore_errors: yes
   loop: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
 
 - name: Start backend server
