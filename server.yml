@@ -16,6 +16,7 @@
     - { role: php,          tags: [php] }
     - { role: composer,     tags: [composer] }
     - { role: nginx,        tags: [nginx] }
+    - { role: nginx-custom, tags: [nginx, nginx-custom] }
     - { role: rvm,          tags: [rvm, ruby] }
     - { role: nodejs,       tags: [nodejs] }
     - { role: postgresql,   tags: [postgresql, databases] }

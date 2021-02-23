@@ -1,0 +1,13 @@
+---
+- name: Check for Nginx MIME types files
+  stat:
+    path: /etc/nginx/mime.types
+  register: nginx_mime_file
+
+- name: Add Markdown MIME type
+  lineinfile:
+    dest: /etc/nginx/mime.types
+    insertafter: text/xml.*
+    line: '    text/markdown                         md;'
+    state: present
+  when: nginx_mime_file.stat.exists
