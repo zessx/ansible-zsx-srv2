@@ -1,0 +1,8 @@
+{% extends 'roles/sites/templates/vhost.conf.j2' %}
+
+{% block server_custom -%}
+    # Shortlinks
+    location = /whishlist {
+        rewrite ^ https://www.amazon.fr/hz/wishlist/ls/2GI4AUURTYLQ2 redirect;
+    }
+{% endblock %}
